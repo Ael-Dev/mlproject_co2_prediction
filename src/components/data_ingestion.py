@@ -5,6 +5,8 @@ from src.exception import CustomException
 from src.logger import logging
 from src.components.data_transformation import DataTransformation
 from src.components.data_transformation import DataTransformationConfig
+from src.components.model_trainer import ModelTrainerConfig
+from src.components.model_trainer import ModelTrainer
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -15,6 +17,8 @@ from dataclasses import dataclass
 # Definir una clase DataIngestionConfig con los atributos raw_data_path, train_data_path y test_data_path con valores por defecto
 @dataclass
 class DataIngestionConfig:
+    # Establecer las rutas de la carpeta donde se almacenaran los datos 
+    # y el nombre con el q se guardaran
     train_data_path:str = os.path.join('artifacts',"train.csv")
     test_data_path:str = os.path.join('artifacts',"test.csv")
     raw_data_path:str = os.path.join('artifacts',"data.csv")
@@ -35,19 +39,25 @@ class DataIngestion:
             df = pd.read_csv(path_raw_data)
             # Registrar un mensaje de información indicando que se leyó el conjunto de datos
             logging.info("Read the dataset")
+
+            # ------------------------------------------------------------------------------------------------
             # Crear el directorio para los archivos de entrenamiento y prueba si no existe
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
             # Guardar en la ruta establecida el dataset obtenido desde otras fuentes
             df.to_csv(self.ingestion_config.raw_data_path,index=False,header=True)
 
+            # ------------------------------------------------------------------------------------------------
             logging.info("Train test split initiated")
             train_set,test_set=train_test_split(df,test_size=0.2,random_state=123)
+            
+            # ------------------------------------------------------------------------------------------------
             # Guardar el dataset se entrenamiento en la ruta establecida
             train_set.to_csv(self.ingestion_config.train_data_path,index=False,header=True)
             # Guardar el dataset se test en la ruta establecida
             test_set.to_csv(self.ingestion_config.test_data_path,index=False,header=True)
             logging.info("Ingestion of the data is completed!")
 
+            # ------------------------------------------------------------------------------------------------
             # Retornar las rutas de donde se almacenaron los datasets
             return (
                 self.ingestion_config.train_data_path,
@@ -61,17 +71,22 @@ class DataIngestion:
 
 
 if __name__ == "__main__":
-    # 1. Crear un objeto de la clase creada DataIngestion()
+    # ------------------------------------------------------------------------------------------------
+    # 1. Crear un objeto de la clase creada DataIngestion
     obj = DataIngestion()
     # 1.1. Inicializamos la ingestion de datos 
     # y recuperamos la rutas donde se guardaron los datos obtenidos
     train_data,test_data = obj.initiate_data_ingestion()
     
-    # 2. Crea un objeto de la clase creada DataTransformation()
+    # ------------------------------------------------------------------------------------------------
+    # 2. Crea un objeto de la clase creada DataTransformation
     data_transformation = DataTransformation()
     # 2.1. Inicializamos la transformation de datos 
     # y recuperamos la data transformada
     train_arr,test_arr, _ = data_transformation.initiate_data_transformation(train_data,test_data)
-    print("success!!!")
-
+    
+    # ------------------------------------------------------------------------------------------------
+    # Crear un objeto de la clase ModelTrainer
+    modeltrainer = ModelTrainer()
+    print(modeltrainer.initiate_model_trainer(train_arr,test_arr))
 
