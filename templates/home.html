@@ -1,0 +1,174 @@
+<html>
+    <head>
+        <style>
+            .login {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            
+            .form-control {
+                border: 1px solid #ccc;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            }
+            
+            .btn {
+                border: none;
+                background-color: #007bff;
+                color: #fff;
+                padding: 10px 20px;
+                border-radius: 5px;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            }
+            
+            .form-label {
+                font-weight: bold;
+                color: #333;
+            }
+            
+            .form-control option {
+                background-color: #fff;
+                color: #333;
+            }
+            
+            .form-control option:checked {
+                background-color: #007bff;
+                color: #fff;
+            }
+        </style>
+    </head>
+<body>
+    <div class="login">
+       <h1>CAR CO2 PREDICTION</h1>
+   
+       <form action="{{ url_for('predict_datapoint')}}" method="post">
+        
+        <div class="mb-3">
+            <label class="form-label">Engine Size</label>
+            <input class="form-control" type="number" name="engine_size"
+                placeholder="Engine Size" min='0' step='0.1' />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Cylinders</label>
+            <select class="form-control" name="cylinders" placeholder="Enter Cylinders" required>
+                <option class="placeholder" selected disabled value="">Select Cylinders</option>
+                <option value="3">
+                    3
+                </option>
+                <option value="4">
+                    4
+                </option>
+                <option value="5">
+                    5
+                </option>
+                <option value="6">
+                    6
+                </option>
+                <option value="8">
+                    8
+                </option>
+                <option value="10">
+                    10
+                </option>
+                <option value="12">
+                    12
+                </option>
+                <option value="16">
+                    16
+                </option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Transmission</label>
+            <select class="form-control" name="transmission" placeholder="Enter Transmission" required>
+                <option class="placeholder" selected disabled value="">Select Transmission</option>
+                <option value="AS5">AS5</option>
+                <option value="M6">M6</option>
+                <option value="AV7">AV7</option>
+                <option value="AS6">AS6</option>
+                <option value="AM6">AM6</option>
+                <option value="A6">A6</option>
+                <option value="AM7">AM7</option>
+                <option value="AV8">AV8</option>
+                <option value="AS8">AS8</option>
+                <option value="A7">A7</option>
+                <option value="A8">A8</option>
+                <option value="M7">M7</option>
+                <option value="A4">A4</option>
+                <option value="M5">M5</option>
+                <option value="AV">AV</option>
+                <option value="A5">A5</option>
+                <option value="AS7">AS7</option>
+                <option value="A9">A9</option>
+                <option value="AS9">AS9</option>
+                <option value="AV6">AV6</option>
+                <option value="AS4">AS4</option>
+                <option value="AM5">AM5</option>
+                <option value="AM8">AM8</option>
+                <option value="AM9">AM9</option>
+                <option value="AS10">AS10</option>
+                <option value="A10">A10</option>
+                <option value="AV10">AV10</option>
+            </select>
+
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Fuel Type</label>
+            <select class="form-control" name="fuel_type" placeholder="Enter Fuel Type" required>
+                <option class="placeholder" selected disabled value="">Select Fuel Type</option>
+                <option value="Z">Z</option>
+                <option value="D">D</option>
+                <option value="X">X</option>
+                <option value="E">E</option>
+                <option value="N">N</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Fuel Consumption City</label>
+            <input class="form-control" type="number" name="fuel_consumption_city"
+                placeholder="Enter Fuel Consumption City" min='0' step='0.1' />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Fuel Consumption Highway</label>
+            <input class="form-control" type="number" name="fuel_consumption_hwy"
+                placeholder="Enter Fuel Consumption Highway" min='0' step='0.1' />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Fuel Consumption Combined</label>
+            <input class="form-control" type="number" name="fuel_consumption_comb"
+                placeholder="Enter Fuel Consumption Combined" min='0' step='0.1' />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Fuel Consumption Combined MPG</label>
+            <input class="form-control" type="number" name="fuel_consumption_comb_mpg"
+                placeholder="Enter Fuel Consumption Combined MPG" min='0' />
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Make Type</label>
+            <select class="form-control" name="make_type" placeholder="Enter Make Type" required>
+                <option class="placeholder" selected disabled value="">Select Make Type</option>
+                <option value="Luxury">Luxury</option>
+                <option value="Premium">Premium</option>
+                <option value="Sports">Sports</option>
+                <option value="General">General</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Vehicle Class Type</label>
+            <select class="form-control" name="vehicle_class_type" placeholder="Enter Vehicle Class Type" required>
+                <option class="placeholder" selected disabled value="">Select Vehicle Class Type</option>
+                <option value="Hatchback">Hatchback</option>
+                <option value="SUV">SUV</option>
+                <option value="Sedan">Sedan</option>
+                <option value="Truck">Truck</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <input class="btn btn-primary" type="submit" value="Predict your Vehicle CO2 Emissions" required />
+        </div>
+    </form>
+    <h2>
+       The CO2 prediction is: {{results}}
+    </h2>
+   <body>
+</html>
