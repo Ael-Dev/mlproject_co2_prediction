@@ -1,8 +1,10 @@
 import os
 import sys
-# my personal script
+#sys.path.insert(0, '../src')
 from src.exception import CustomException
 from src.logger import logging
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -29,7 +31,8 @@ class DataIngestion:
         logging.info("Entered the data ingestion method or component")
         try:
             # Leer los datos que puede encontrarse en una cualquier fuente(BDs) y formato (csv, data, etc) 
-            df = pd.read_csv("../../notebook/data/DATA_CLEANED.csv")
+            path_raw_data = "C:/Users/Alex/Desktop/R/machine learning/10.Projects/mlproject_co2_prediction/notebook/data/DATA_CLEANED.csv"
+            df = pd.read_csv(path_raw_data)
             # Registrar un mensaje de información indicando que se leyó el conjunto de datos
             logging.info("Read the dataset")
             # Crear el directorio para los archivos de entrenamiento y prueba si no existe
@@ -38,7 +41,7 @@ class DataIngestion:
             df.to_csv(self.ingestion_config.raw_data_path,index=False,header=True)
 
             logging.info("Train test split initiated")
-            train_set,test_set=train_test_split(df,test_size=0.2,random_state=42)
+            train_set,test_set=train_test_split(df,test_size=0.2,random_state=123)
             # Guardar el dataset se entrenamiento en la ruta establecida
             train_set.to_csv(self.ingestion_config.train_data_path,index=False,header=True)
             # Guardar el dataset se test en la ruta establecida
@@ -53,15 +56,22 @@ class DataIngestion:
 
         # Manejar la excepción si ocurre algún error
         except Exception as e:
-            # Lanzar una excepción personalizada con el sistema y el error como argumentos
-            raise CustomException(sys, e)
+            # Lanzar una excepción personalizada con el error  y el sistema  como argumentos
+            raise CustomException(e, sys)
 
 
 if __name__ == "__main__":
     # 1. Crear un objeto de la clase creada DataIngestion()
     obj = DataIngestion()
-    # Inicializamos la ingestion de datos y recuperamos la rutas donde se guardaron los datos obtenidos
+    # 1.1. Inicializamos la ingestion de datos 
+    # y recuperamos la rutas donde se guardaron los datos obtenidos
     train_data,test_data = obj.initiate_data_ingestion()
-    print(train_data)
-    print(test_data)
+    
+    # 2. Crea un objeto de la clase creada DataTransformation()
+    data_transformation = DataTransformation()
+    # 2.1. Inicializamos la transformation de datos 
+    # y recuperamos la data transformada
+    train_arr,test_arr, _ = data_transformation.initiate_data_transformation(train_data,test_data)
+    print("success!!!")
+
 
