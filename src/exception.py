@@ -1,18 +1,14 @@
+from src.logger import logging
 import sys
 
 # Definir una función que recibe un error y un detalle del error
 def error_message_detail(error, error_detail:sys):
     # Obtener la información de la traza del error
     _,_,exc_tb = error_detail.exc_info()
-    # Obtener el nombre del archivo donde ocurrió el error
     file_name = exc_tb.tb_frame.f_code.co_filename
-    # Obtener el número de línea donde ocurrió el error
-    line_number = exc_tb.tb_lineno
-    # Obtener el mensaje del error
-    error_message = str(error)
-    # Formatear el mensaje de error con el nombre del archivo, el número de línea y el mensaje del error
-    return f"Error occurred in python script name [{file_name}] line number [{line_number}] error message[{error_message}]"
-
+    error_message = "Error occurred in python script name [{0}] line number [{1}] error message[{2}]".format(
+        file_name, exc_tb.tb_lineno, str(error)  )
+    return error_message
 
 # Definir una clase de excepción personalizada que hereda de Exception
 class CustomException(Exception):
